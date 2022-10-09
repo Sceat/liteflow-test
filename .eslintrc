@@ -1,11 +1,14 @@
 {
-  "extends": ["standard", "prettier"],
-  "parser": "@babel/eslint-parser",
-  "parserOptions": {
-    "requireConfigFile": false,
-    "sourceType": "module",
-    "ecmaVersion": 12
-  },
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "standard",
+    "prettier"
+  ],
   "rules": {
     "camelcase": "off",
     "no-var": "error",
@@ -17,6 +20,7 @@
     "prefer-destructuring": "error",
     "prefer-numeric-literals": "error",
     "import/order": ["error", { "newlines-between": "always" }],
-    "no-throw-literal": 0
+    "no-throw-literal": 0,
+    "@typescript-eslint/ban-ts-comment": 0
   }
 }

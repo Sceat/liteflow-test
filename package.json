@@ -5,41 +5,55 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node -r dotenv/config src/index.js | pino-human",
+    "start": "ts-node --esm --experimental-specifier-resolution node src/index.ts | pino-human",
     "lint": "eslint . && prettier . --check",
     "format": "prettier . --write && eslint . --fix",
+    "test": "mocha",
+    "graphql": "postgraphile --dynamic-json --enhance-graphiql --append-plugins @graphile-contrib/pg-simplify-inflector --export-schema-graphql schema.gql",
     "postversion": "git push --follow-tags"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sceat/service-starter.git"
   },
-  "babel": {
-    "parserOpts": {
-      "allowAwaitOutsideFunction": true
-    }
-  },
   "keywords": [],
   "author": "sceat",
   "license": "ISC",
   "dependencies": {
     "@hydre/pino-human": "1.3.0",
+    "@types/pg": "^8.6.5",
     "dotenv": "^16.0.1",
+    "ethers": "^5.7.1",
+    "iterator-helper": "^1.3.4",
+    "pg": "^8.8.0",
     "pino": "^8.4.2",
+    "ts-node": "^10.9.1",
     "undici": "^5.10.0"
   },
   "devDependencies": {
     "@babel/core": "^7.18.13",
     "@babel/eslint-parser": "7.18.9",
-    "eslint": "^8.23.0",
+    "@graphile-contrib/pg-simplify-inflector": "^6.1.0",
+    "@istanbuljs/nyc-config-typescript": "^1.0.2",
+    "@types/expect": "^24.3.0",
+    "@types/mocha": "^10.0.0",
+    "@types/node": "^18.8.3",
+    "@typescript-eslint/eslint-plugin": "^5.39.0",
+    "@typescript-eslint/parser": "^5.39.0",
+    "eslint": "^8.24.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-config-standard": "17.0.0",
     "eslint-plugin-import": "2.26.0",
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-promise": "6.0.1",
+    "esm": "^3.2.25",
     "husky": "4.3.8",
     "lint-staged": "13.0.3",
-    "prettier": "2.7.1"
+    "mocha": "^10.0.0",
+    "nyc": "^15.1.0",
+    "postgraphile": "^4.12.11",
+    "prettier": "2.7.1",
+    "typescript": "^4.8.4"
   },
   "husky": {
     "hooks": {
@@ -47,7 +61,7 @@
     }
   },
   "lint-staged": {
-    "*.js": [
+    "*.ts": [
       "prettier --write",
       "eslint --fix"
     ],
