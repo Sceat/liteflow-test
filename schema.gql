@@ -1,0 +1,297 @@
+"""
+The root query type which gives access points into the data universe.
+"""
+type Query implements Node {
+  """
+  Exposes the root query type nested one level down. This is helpful for Relay 1
+  which can only query top level fields if they are in a particular form.
+  """
+  query: Query!
+
+  """
+  The root query type must be a `Node` to work well with Relay 1 mutations. This just resolves to `query`.
+  """
+  nodeId: ID!
+
+  """
+  Fetches an object given its globally unique `ID`.
+  """
+  node(
+    """
+    The globally unique `ID`.
+    """
+    nodeId: ID!
+  ): Node
+
+  """
+  Reads and enables pagination through a set of `Sale`.
+  """
+  sales(
+    """
+    Only read the first `n` values of the set.
+    """
+    first: Int
+
+    """
+    Only read the last `n` values of the set.
+    """
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """
+    Read all values in the set before (above) this cursor.
+    """
+    before: Cursor
+
+    """
+    Read all values in the set after (below) this cursor.
+    """
+    after: Cursor
+
+    """
+    The method to use when ordering `Sale`.
+    """
+    orderBy: [SalesOrderBy!] = [NATURAL]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: SaleCondition
+  ): SalesConnection
+}
+
+"""
+An object with a globally unique `ID`.
+"""
+interface Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+}
+
+"""
+A connection to a list of `Sale` values.
+"""
+type SalesConnection {
+  """
+  A list of `Sale` objects.
+  """
+  nodes: [Sale]!
+
+  """
+  A list of edges which contains the `Sale` and cursor to aid in pagination.
+  """
+  edges: [SalesEdge!]!
+
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+
+  """
+  The count of *all* `Sale` you could get from the connection.
+  """
+  totalCount: Int!
+}
+
+type Sale {
+  txHash: String
+  seller: String
+  buyer: String
+  tokenId: BigFloat
+  collection: String
+  soldQuantity: BigFloat
+  amountPaid: BigFloat
+}
+
+"""
+A floating point number that requires more precision than IEEE 754 binary 64
+"""
+scalar BigFloat
+
+"""
+A `Sale` edge in the connection.
+"""
+type SalesEdge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor
+
+  """
+  The `Sale` at the end of the edge.
+  """
+  node: Sale
+}
+
+"""
+A location in a connection that can be used for resuming pagination.
+"""
+scalar Cursor
+
+"""
+Information about pagination in a connection.
+"""
+type PageInfo {
+  """
+  When paginating forwards, are there more items?
+  """
+  hasNextPage: Boolean!
+
+  """
+  When paginating backwards, are there more items?
+  """
+  hasPreviousPage: Boolean!
+
+  """
+  When paginating backwards, the cursor to continue.
+  """
+  startCursor: Cursor
+
+  """
+  When paginating forwards, the cursor to continue.
+  """
+  endCursor: Cursor
+}
+
+"""
+Methods to use when ordering `Sale`.
+"""
+enum SalesOrderBy {
+  NATURAL
+  TX_HASH_ASC
+  TX_HASH_DESC
+  SELLER_ASC
+  SELLER_DESC
+  BUYER_ASC
+  BUYER_DESC
+  TOKEN_ID_ASC
+  TOKEN_ID_DESC
+  COLLECTION_ASC
+  COLLECTION_DESC
+  SOLD_QUANTITY_ASC
+  SOLD_QUANTITY_DESC
+  AMOUNT_PAID_ASC
+  AMOUNT_PAID_DESC
+}
+
+"""
+A condition to be used against `Sale` object types. All fields are tested for equality and combined with a logical ‘and.’
+"""
+input SaleCondition {
+  """
+  Checks for equality with the object’s `txHash` field.
+  """
+  txHash: String
+
+  """
+  Checks for equality with the object’s `seller` field.
+  """
+  seller: String
+
+  """
+  Checks for equality with the object’s `buyer` field.
+  """
+  buyer: String
+
+  """
+  Checks for equality with the object’s `tokenId` field.
+  """
+  tokenId: BigFloat
+
+  """
+  Checks for equality with the object’s `collection` field.
+  """
+  collection: String
+
+  """
+  Checks for equality with the object’s `soldQuantity` field.
+  """
+  soldQuantity: BigFloat
+
+  """
+  Checks for equality with the object’s `amountPaid` field.
+  """
+  amountPaid: BigFloat
+}
+
+"""
+The root mutation type which contains root level fields which mutate data.
+"""
+type Mutation {
+  """
+  Creates a single `Sale`.
+  """
+  createSale(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateSaleInput!
+  ): CreateSalePayload
+}
+
+"""
+The output of our create `Sale` mutation.
+"""
+type CreateSalePayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """
+  The `Sale` that was created by this mutation.
+  """
+  sale: Sale
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """
+  An edge for our `Sale`. May be used by Relay 1.
+  """
+  saleEdge(
+    """
+    The method to use when ordering `Sale`.
+    """
+    orderBy: [SalesOrderBy!] = [NATURAL]
+  ): SalesEdge
+}
+
+"""
+All input for the create `Sale` mutation.
+"""
+input CreateSaleInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The `Sale` to be created by this mutation.
+  """
+  sale: SaleInput!
+}
+
+"""
+An input for mutations affecting `Sale`
+"""
+input SaleInput {
+  txHash: String
+  seller: String
+  buyer: String
+  tokenId: BigFloat
+  collection: String
+  soldQuantity: BigFloat
+  amountPaid: BigFloat
+}
